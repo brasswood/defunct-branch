@@ -1,0 +1,25 @@
+# defunct-branch
+
+Turn a local Git branch into a `defunct-` tag and remove the branch.
+
+## Usage
+
+From the repository containing the branch, run:
+
+```console
+defunct-branch.py [BRANCH]
+```
+
+Without `BRANCH`, the script uses the currently checked-out branch. For
+example, running `defunct-branch branchname` creates `defunct-branchname` at
+the branch's tip, then deletes `branchname` locally.
+
+The script refuses to overwrite an existing tag. When retiring the checked-out
+branch, it leaves Git detached at the branch's last commit. It makes only local
+changes; push the resulting tag and delete the remote branch separately if
+needed.
+
+## License
+
+This project is dedicated to the public domain under CC0 1.0 Universal. See
+[LICENSE](LICENSE) for the official legal code.
