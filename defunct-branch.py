@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replace a local Git branch with a defunct-* tag."""
+"""Replace a local Git branch with a tag."""
 
 from __future__ import annotations
 
@@ -46,11 +46,16 @@ def main() -> int:
         description="Replace a local branch with a defunct-* tag."
     )
     parser.add_argument("branch", nargs="?", help="branch to retire")
+    parser.add_argument(
+        "--keep-name",
+        action="store_true",
+        help="use the branch name as the tag name instead of adding defunct-",
+    )
     args = parser.parse_args()
 
     try:
         branch = args.branch or current_branch()
-        tag = f"defunct-{branch}"
+        tag = branch if args.keep_name else f"defunct-{branch}"
         if not branch_exists(branch):
             raise RuntimeError(f"branch does not exist: {branch}")
         if tag_exists(tag):
