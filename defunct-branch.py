@@ -87,7 +87,7 @@ def main() -> int:
         if remote_info is not None:
             remote, remote_branch = remote_info
             git("push", remote, "refs/tags/" + tag)
-            git("push", remote, "--delete", remote_branch)
+            git("push", remote, f":refs/heads/{remote_branch}")
         if git("branch", "--show-current") == branch:
             git("switch", "--detach")
         git("branch", "-D", branch)
