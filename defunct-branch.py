@@ -63,10 +63,16 @@ def main() -> int:
         description="Replace a local branch with a defunct-* tag."
     )
     parser.add_argument("branch", nargs="?", help="branch to retire")
-    parser.add_argument(
+    tag_options = parser.add_mutually_exclusive_group()
+    tag_options.add_argument(
         "--keep-name",
         action="store_true",
         help="use the branch name as the tag name instead of adding defunct-",
+    )
+    tag_options.add_argument(
+        "--tag-name",
+        metavar="TAG",
+        help="use TAG as the tag name",
     )
     parser.add_argument(
         "--push",
@@ -77,7 +83,12 @@ def main() -> int:
 
     try:
         branch = args.branch or current_branch()
-        tag = branch if args.keep_name else f"defunct-{branch}"
+        if args.tag_name is not None:
+            tag = args.tag_name
+        elif args.keep_name:
+            tag = branch
+        else:
+            tag = f"defunct-{branch}"
         if not branch_exists(branch):
             raise RuntimeError(f"branch does not exist: {branch}")
         if tag_exists(tag):
