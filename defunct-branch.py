@@ -70,7 +70,7 @@ def main() -> int:
         help="use the branch name as the tag name instead of adding defunct-",
     )
     tag_options.add_argument(
-        "--tag-name",
+        "--name",
         metavar="TAG",
         help="use TAG as the tag name",
     )
@@ -83,8 +83,8 @@ def main() -> int:
 
     try:
         branch = args.branch or current_branch()
-        if args.tag_name is not None:
-            tag = args.tag_name
+        if args.name is not None:
+            tag = args.name
         elif args.keep_name:
             tag = branch
         else:

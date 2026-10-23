@@ -7,7 +7,7 @@ Turn a local Git branch into a `defunct-` tag and remove the branch.
 From the repository containing the branch, run:
 
 ```console
-defunct-branch.py [--keep-name | --tag-name TAG] [--push] [BRANCH]
+defunct-branch.py [--keep-name | --name TAG] [--push] [BRANCH]
 ```
 
 Without `BRANCH`, the script uses the currently checked-out branch. For
@@ -17,9 +17,9 @@ the branch's tip, then deletes `branchname` locally.
 Pass `--keep-name` to use the branch's name unchanged for the tag. For example,
 `defunct-branch --keep-name release-1` replaces the `release-1` branch with a
 `release-1` tag. Without this option, the `defunct-` prefix remains the default.
-Use `--tag-name TAG` to choose an exact tag name instead, for example
-`defunct-branch --tag-name archived-api api` creates the `archived-api` tag
-for branch `api`. `--tag-name` and `--keep-name` cannot be used together.
+Use `--name TAG` to choose an exact tag name instead, for example
+`defunct-branch --name archived-api api` creates the `archived-api` tag for
+branch `api`. `--name` and `--keep-name` cannot be used together.
 
 The script refuses to overwrite an existing tag. When retiring the checked-out
 branch, it leaves Git detached at the branch's last commit. By default it makes
