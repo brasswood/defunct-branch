@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+step() {
+  local name="$1" started=$SECONDS
+  shift
+  printf '==> %s\n' "$name"
+  "$@"
+  printf '<== %s (%ss)\n' "$name" "$((SECONDS - started))"
+}
+
+python_ready() {
+  command -v python3 >/dev/null &&
+    python3 -c 'import sys; raise SystemExit(sys.version_info < (3, 7))' >/dev/null 2>&1
+}
+
+install_python() {
+  local -a privilege=()
+  if (( EUID != 0 )); then
+    command -v sudo >/dev/null || { echo "sudo is required to install python3" >&2; return 1; }
+    privilege=(sudo)
+  fi
+  "${privilege[@]}" apt-get update
+  "${privilege[@]}" apt-get install -y python3
+}
+
+verify_toolchain() {
+  command -v git >/dev/null || { echo "git is required but unavailable" >&2; return 1; }
+  python_ready || { echo "Python 3.7 or newer is required" >&2; return 1; }
+  python3 --version
+  echo "No third-party Python packages are required."
+}
+
+if ! python_ready; then
+  command -v apt-get >/dev/null || { echo "apt-get is required to install python3" >&2; exit 1; }
+  step "Install Python 3" install_python
+fi
+step "Verify repository toolchain" verify_toolchain
